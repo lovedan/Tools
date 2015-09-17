@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>無題ドキュメント</title>
+<script>
+var popupWindow=null;
+ function popup(){
+popupWindow = window.open("http://www.w3school.com.cn","_blank","toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=400, height=400");
+window.modalCover.create();
+}
+
+function IfWindowClosed() {
+if (popupWindow && popupWindow.closed) { 
+window.modalCover.remove();
+window.clearInterval(timer);
+}
+}
+ window.onload = function() {
+
+window.modalCover = {};
+
+window.modalCover.create = function() {
+    var coverDiv = document.createElement("div");
+    coverDiv.id = "modal-cover";
+    coverDiv.style.width = window.innerWidth + "px";
+    coverDiv.style.height = window.innerHeight + "px";
+    coverDiv.style.position = "absolute";
+    coverDiv.style.top = 0;
+    coverDiv.style.left = 0;
+    coverDiv.style.backgroundColor = "black";
+    coverDiv.style.opacity = 0.5;
+    coverDiv.addEventListener("click", function() {
+      return false;   
+    }, false);
+    document.body.appendChild(coverDiv);
+    timer=window.setInterval("IfWindowClosed()",500);
+}
+
+window.modalCover.remove = function() {
+    var cover = document.getElementById("modal-cover");
+    document.body.removeChild(cover);
+}
+}
+</script>
+
+</head>
+
+<body>
+<button>Regular content</button>
+<input type="button" onClick="return popup();" value="ddd" />
+</body>
+</html>
