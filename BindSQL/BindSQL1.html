@@ -1,0 +1,52 @@
+﻿<script>
+	
+	function bind()
+	{
+		if(parameters.value && preparedStmt.value)	
+		{
+			 //reset notice
+			 noticeArea.innerText="";
+			 //replace special character
+			 var reg=new RegExp("\r\n","g");
+			 var paramArray = parameters.value.replace(reg,"").split(parameterSep.value);	
+			 nativeSQL.value = preparedStmt.value;
+			 //foreach
+			 for(var i=0;i<paramArray.length;i++)
+			 {
+			 		nativeSQL.value = nativeSQL.value.replace("?",paramArray[i]);
+			 }
+			 			 
+			 if(nativeSQL.value.indexOf("?") != -1)
+			 {
+			 		noticeArea.innerText="问号没有全部匹配,你识数吗？";	
+			 }
+			 
+		}
+	}
+	</script>
+	
+	<h2 style="color:blue" align="center">替换SQL文中的问号！</h2>
+	
+<table align="center">
+    <tr>
+			<td>变量分隔符：</td>
+			<td><input id="parameterSep" value=","> &nbsp;<span id="noticeArea" style="color:red"></span></td>
+    </tr>
+	  <tr>
+			<td>要替换的SQL：</td>
+			<td><textarea id="preparedStmt" cols=100% rows=7></textarea></td>
+    </tr>
+ 	  <tr>
+			<td>变量：</td>
+			<td><textarea id="parameters" cols=100% rows=3></textarea></td>
+    </tr>
+ 
+  	<tr>
+			<td>转换后的SQL：</td>
+			<td><textarea id="nativeSQL" cols=100% rows=10 style="color:blue"></textarea></td>
+    </tr>
+ 
+   	<tr>
+			<td colspan=2 align="center"><input type="button" value="转换" onclick="bind();"></td>
+		</tr>
+</table>
