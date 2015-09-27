@@ -1,0 +1,64 @@
+﻿<script>
+	
+	function bind()
+	{
+		if(preparedStmt.value)	
+		{
+			 //reset notice
+			 noticeArea.innerText="";
+			 //replace special character
+			 var reg=new RegExp("\r\n","g");
+			 var BindHead=new RegExp("BIND:\\[","g");
+			 var BindLast=new RegExp("\]","g");
+			 var regBind=new RegExp("BIND:\\[.*\\]","g");
+			 var paramTemp = preparedStmt.value.match(regBind);
+			 if(paramTemp){
+				 parameters.value = paramTemp;
+				 parameters.value = parameters.value.replace(BindHead,"")
+				 parameters.value = parameters.value.replace(BindLast,"")
+				 var paramArray = parameters.value.replace(reg,"").split(parameterSep.value);
+				 nativeSQL.value = preparedStmt.value.replace(regBind,"");
+				 //foreach
+				 for(var i=0;i<paramArray.length;i++)
+				 {
+				 		nativeSQL.value = nativeSQL.value.replace("?",paramArray[i]);
+				 }
+				 			 
+				 if(nativeSQL.value.indexOf("?") != -1)
+				 {
+				 		noticeArea.innerText="问号没有全部匹配,你识数吗？";	
+				 }
+			 }else{
+			 	noticeArea.innerText="你傻吗?参数部分要这么些Bind:[XXXX]";
+			 }
+		}else{
+			noticeArea.innerText="你傻吗?什么也不写";	
+		}
+	}
+	</script>
+	
+	<h2 style="color:blue" align="center">替换SQL文中的问号！</h2>
+	
+<table align="center">
+    <tr>
+			<td>变量分隔符：</td>
+			<td><input id="parameterSep" value=","> &nbsp;<span id="noticeArea" style="color:red"></span></td>
+    </tr>
+	  <tr>
+			<td>要替换的SQL：</td>
+			<td><textarea id="preparedStmt" cols=100% rows=7></textarea></td>
+    </tr>
+ 	<tr>
+			<td>变量：</td>
+			<td><textarea id="parameters" cols=100% rows=3></textarea></td>
+    </tr>
+ 
+  	<tr>
+			<td>转换后的SQL：</td>
+			<td><textarea id="nativeSQL" cols=100% rows=10 style="color:blue"></textarea></td>
+    </tr>
+ 
+   	<tr>
+			<td colspan=2 align="center"><input type="button" value="转换" onclick="bind();"></td>
+		</tr>
+</table>
