@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Standard Meta -->
@@ -13,6 +13,11 @@
 
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/semantic.min.js"></script>
+	<script src="clipboard.min.js"></script>
+
+    <script>
+
+    </script>
 	<script>
 		$(document)
 				.ready(function() {
@@ -76,21 +81,33 @@
 
 					if(nativeSQL.value.indexOf("?") != -1)
 					{
-						$('.ui.modal').modal('show');
+						$('.ui.modaldial').modal('show');
 						noticeArea.innerText="问号没有全部匹配,你识数吗？";
+					}else{
+					
+    				    var clipboard = new Clipboard('.btn');
+    
+                        clipboard.on('success', function(e) {
+                            $('.ui.modalcopy').modal('show');
+                            noticeArea1.innerText="文字已复制到剪贴板中";
+                            console.log(e);
+                        });
+                    
+                        clipboard.on('error', function(e) {
+                            console.log(e);
+                        });
 					}
 				}else{
-					$('.ui.modal').modal('show');
+					$('.ui.modaldial').modal('show');
 					noticeArea.innerText="你傻吗?参数部分要这么写BIND:[XXXX]";
 				}
 			}else{
-				$('.ui.modal').modal('show');
+				$('.ui.modaldial').modal('show');
 				noticeArea.innerText="你傻吗?什么也不写";
 			}
 		}
 
 	</script>
-
 	<style type="text/css">
 
 		body {
@@ -183,7 +200,7 @@
 		<a class="ui tag label">变量分隔符 </a>
 	</div>
 
-	<div class="ui modal">
+	<div class="ui modal modaldial">
 		<i class="close icon"></i>
 		<div class="header">
 			<div class="ui error message">
@@ -197,6 +214,22 @@
 			</div>
 			<div class="ui positive right labeled icon button">
 				是的
+				<i class="checkmark icon"></i>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ui modal modalcopy">
+		<i class="close icon"></i>
+		<div class="header">
+			<div class="ui error message">
+				<div id="noticeArea1" class="header">被禁止的行为</div>
+			</div>
+		</div>
+
+		<div class="actions">
+			<div class="ui positive right labeled icon button">
+				关闭
 				<i class="checkmark icon"></i>
 			</div>
 		</div>
@@ -219,10 +252,22 @@
 	</div>
 
 	<div class="ui two bottom attached buttons">
-		<div class="ui button" onclick="bind();">转换</div>
+		<div class="ui button btn" onclick="bind();" data-clipboard-action="copy" data-clipboard-target="#nativeSQL">转换</div>
 		<div class="ui button" onclick="clearform();">清除</div>
 	</div>
 
 </div>
+
+  <div class="ui grey inverted vertical footer segment">
+    <div class="ui center aligned container">
+      <img src="/images/logo.png" class="ui centered small image">
+      <div class="ui horizontal inverted small divided link list">
+        <a class="item" href="#">江南品味</a>
+        <a class="item" href="#">关于作者</a>
+        <a class="item" href="#">联系我们</a>
+        <a class="item" href="#">艾旦网络</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
